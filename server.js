@@ -6,18 +6,24 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 const expressLayouts = require("express-ejs-layouts");
+// Bodyparser is a library that lets express access the variables of the author names
+const bodyParser = require("body-parser");
 
 //require the router file of index
 const indexRouter = require("./routes/index");
+// require author router
+const authorRouter = require("./routes/authors");
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout");
 app.use(expressLayouts);
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 
-//tell app to use index router
+//tell app to use routers
 app.use("/", indexRouter);
+app.use("/authors", authorRouter);
 
 //import mongodb integration
 const mongoose = require("mongoose");
